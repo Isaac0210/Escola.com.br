@@ -13,22 +13,59 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $senha = $_POST["senha"] ?? "";
 
     if (gravar_professor($conexao, $nome, $cpf, $curso, $login, $senha)) {
-        $mensagem = "Professor cadastrado com sucesso!";
+        $foto = enviar_foto($_FILES["foto"] ?? null, __DIR__ . "/uploads");
+        if ($foto !== false) {
+            atualizar_foto_professor($conexao, md5($cpf), $foto);
+            $mensagem = "Professor cadastrado com foto!";
+        } else {
+            $mensagem = "Professor cadastrado, mas houve erro ao enviar a foto (verifique formato JPEG/PNG/WEBP e tamanho até 2 MB).";
+        }
     } else {
-        $mensagem = "Erro ao cadastrar professor: " . mysqli_error($conexao);
+        $mensagem = "Erro ao cadastrar professor.";
     }
 }
 ?>
-<h1>Cadastro de professor</h1>
-<?php if ($mensagem !== "") { ?>
-    <p><?= htmlspecialchars($mensagem) ?></p>
-<?php } ?>
-<form method="POST">
-    Nome: <input type="text" name="nome" required><br><br>
-    CPF: <input type="text" name="cpf" required><br><br>
-    Curso: <input type="text" name="curso" required><br><br>
-    Login: <input type="text" name="login" required><br><br>
-    Senha: <input type="password" name="senha" required><br><br>
-    <button type="submit">Gravar professor</button>
-</form>
-<a href="index.php">Voltar ao início</a>
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Cadastro de Professor</title>
+  <link rel="stylesheet" href="estilo.css">
+</head>
+<body>
+  <div class="container">
+    <h1>Cadastro de professor</h1>
+    <?php if ($mensagem !== "") { ?>
+      <div class="msg"><?= htmlspecialchars($mensagem) ?></div>
+    <?php } ?>
+    <form method="POST" enctype="multipart/form-data">
+      <div class="campo">
+        <label for="nome">Nome</label>
+        <input id="nome" type="text" name="nome" required>
+      </div>
+      <div class="campo">
+        <label for="cpf">CPF</label>
+        <input id="cpf" type="text" name="cpf" required>
+      </div>
+      <div class="campo">
+        <label for="curso">Curso</label>
+        <input id="curso" type="text" name="curso" required>
+      </div>
+      <div class="campo">
+        <label for="login">Login</label>
+        <input id="login" type="text" name="login" required>
+      </div>
+      <div class="campo">
+        <label for="senha">Senha</label>
+        <input id="senha" type="password" name="senha" required>
+      </div>
+      <div class="campo">
+        <label for="foto">Foto (JPEG, PNG ou WEBP - máx. 2 MB)</label>
+        <input id="foto" type="file" name="foto" accept="image/jpeg,image/png,image/webp" required>
+      </div>
+      <button class="btn" type="submit">Gravar professor</button>
+    </form>
+    <a class="footer-link" href="index.php">Voltar ao início</a>
+  </div>
+</body>
+</html>

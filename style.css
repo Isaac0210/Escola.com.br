@@ -167,6 +167,7 @@ table {
 th, td {
   padding: 12px 14px;
   text-align: left;
+  vertical-align: middle;
   border-bottom: 1px solid var(--border);
   font-size: 0.92rem;
 }
@@ -181,14 +182,42 @@ tr:hover td {
   background: rgba(255, 255, 255, 0.03);
 }
 
+/* Centraliza o título "Ações" e o conteúdo da célula */
+th.acoes-col,
+td.acoes {
+  text-align: center;
+  vertical-align: middle;
+}
+
 .acoes {
   display: flex;
-  gap: 10px;
+  justify-content: center;
   align-items: center;
+  gap: 10px;
+  white-space: nowrap;
+}
+
+.acoes a {
+  padding: 5px 10px;
+  border-radius: 6px;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  font-size: 0.85rem;
+}
+
+.acoes a:hover {
+  text-decoration: none;
+  background: #334155;
 }
 
 .acoes a.excluir {
-  color: #f87171;
+  color: #fca5a5;
+  background: rgba(239, 68, 68, 0.14);
+  border-color: rgba(239, 68, 68, 0.35);
+}
+
+.acoes a.excluir:hover {
+  background: rgba(239, 68, 68, 0.25);
 }
 
 .footer-link {
